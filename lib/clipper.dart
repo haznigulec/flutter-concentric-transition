@@ -12,8 +12,8 @@ class ConcentricClipper extends CustomClipper<Path> {
 
   const ConcentricClipper({
     this.progress = 0.0,
-    this.verticalPosition = 0.85,
-    this.radius = 30.0,
+    this.verticalPosition = 1,
+    this.radius = -1,
     this.growFactor = 30.0,
     this.reverse = false,
   });

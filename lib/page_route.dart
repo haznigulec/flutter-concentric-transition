@@ -5,12 +5,14 @@ class ConcentricPageRoute<T> extends PageRoute<T> {
   ConcentricPageRoute({
     required this.builder,
     RouteSettings? settings,
+    this.verticalPosition = 1.0,
     this.maintainState = true,
     bool fullscreenDialog = false,
   }) : super(settings: settings, fullscreenDialog: fullscreenDialog);
 
   /// Builds the primary contents of the route.
   final WidgetBuilder builder;
+  final double verticalPosition;
 
   @override
   final bool maintainState;
@@ -47,8 +49,7 @@ class ConcentricPageRoute<T> extends PageRoute<T> {
     final Widget? result = builder(context);
     assert(() {
       if (result == null) {
-        throw FlutterError(
-            'The builder for route "${settings.name}" returned null.\n'
+        throw FlutterError('The builder for route "${settings.name}" returned null.\n'
             'Route builders must never return null.');
       }
       return true;
@@ -68,7 +69,7 @@ class ConcentricPageRoute<T> extends PageRoute<T> {
     Widget child,
   ) {
     //    final PageTransitionsTheme theme = Theme.of(context).pageTransitionsTheme;
-    return _FadeInPageTransition(routeAnimation: animation, child: child);
+    return _FadeInPageTransition(routeAnimation: animation, verticalPosition: verticalPosition, child: child);
   }
 
   @override
@@ -76,11 +77,12 @@ class ConcentricPageRoute<T> extends PageRoute<T> {
 }
 
 class _FadeInPageTransition extends StatelessWidget {
+  final double verticalPosition;
   _FadeInPageTransition({
     Key? key,
-    required Animation<double>
-        routeAnimation, // The route's linear 0.0 - 1.0 animation.
+    required Animation<double> routeAnimation,
     required this.child,
+    required this.verticalPosition,
   })  : _opacityAnimation = routeAnimation.drive(_easeInTween),
         super(key: key);
 
@@ -91,8 +93,7 @@ class _FadeInPageTransition extends StatelessWidget {
   // );
   // static final Animatable<double> _fastOutSlowInTween =
   //     CurveTween(curve: Curves.fastOutSlowIn);
-  static final Animatable<double> _easeInTween =
-      CurveTween(curve: Curves.easeIn);
+  static final Animatable<double> _easeInTween = CurveTween(curve: Curves.easeIn);
 
   final Animation<double> _opacityAnimation;
   final Widget child;
@@ -104,7 +105,7 @@ class _FadeInPageTransition extends StatelessWidget {
     //   child: child,
     // );
     return ClipPath(
-      clipper: ConcentricClipper(progress: _opacityAnimation.value),
+      clipper: ConcentricClipper(verticalPosition: verticalPosition, progress: _opacityAnimation.value),
       child: child,
     );
   }

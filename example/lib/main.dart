@@ -1,12 +1,11 @@
+import 'package:concentric_transition_example/route_example.dart';
 import 'package:flutter/material.dart';
-
-import 'onboarding_example.dart';
 
 void main() {
   runApp(
     const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: OnboardingExample(),
+      home: RouteExample(),
     ),
   );
 }
